@@ -36,7 +36,7 @@ images：
 
 该特征即包含空间特征，也包含了LSTM学习到的序列特征。
 
-* 然后经过“FC”卷积层，变为Nx512xHxW的特征
+* 然后经过“FC”卷积层，变为**Nx512xHxW**的特征
 
 * 最后经过类似Faster-RCNN的RPN网络，获得text proposals，如图
 
@@ -66,15 +66,17 @@ images：
 
 ***特别说明：上述是对原paper+caffe代码的解释，其他代码实现异同不在本文讨论范围内***
 
+## 三大问题
+
 接下来，文章围绕下面三个问题展开：
 
-1：为何使用双向lstm
+**1：为何使用双向lstm**
 
-2：如何通过fc层输出产生图2-b中的Text proposals
+**2：如何通过fc层输出产生图2-b中的Text proposals**
 
-3：如何通过Text proposals确定最终的文本位置，即文本线构造算法
+**3：如何通过Text proposals确定最终的文本位置，即文本线构造算法**
 
-## 为何使用双向LSTM
+## 1.为何使用双向LSTM
 
 - 对于RNN原理不了解的读者，请先参考RNN原理介绍：
 
@@ -98,11 +100,11 @@ CTPN中使用双向LSTM，相比一般单向的LSTM有什么优势？双向lstm�
 
 一般说，双向lstm都好于单向lstm。还是看lstm介绍文章中的例子：
 
-\> 我的手机坏了，我打算一部新手机。
+> 我的手机坏了，我打算___一部新手机。
 
 假设使用LSTM对空白部分填词。如果只看横线前面的词，“手机坏了”，那么“我”是打算“修”还是“买”还是“大哭一场”？双向LSTM能看到后面的词是“一部新手机“，那么横线上的词填“买“的概率就大得多了。显然对于文字检测，这种情况也依然适用。
 
-## 如何通过“FC”卷积层输出产生图2-b中的Text proposals?
+## 2.如何通过“FC”卷积层输出产生图2-b中的Text proposals?
 
 
 
@@ -116,7 +118,7 @@ CTPN中使用双向LSTM，相比一般单向的LSTM有什么优势？双向lstm�
 
 CTPN通过CNN和BLSTM学到一组“空间+序列”特征后，在“FC”卷积层后接入RPN网络。这里的RPN与Faster-RCNN类似，分为两个分支：
 
-1：左边分支用于bounding box regression。由于FC feature map每个点都配备了10个anchor，同时只回归中心y坐标与高度2个值，所以rpn_bboxp_red有20个channels
+1：左边分支用于bounding box regression。由于FC  feature map每个点都配备了10个anchor，同时只回归中心y坐标与高度2个值，所以rpn_bboxp_red有20个channels
 
 2：右边分支用于softmax分类Anchor。
 
@@ -154,7 +156,7 @@ CTPN通过CNN和BLSTM学到一组“空间+序列”特征后，在“FC”卷�
 
 1. Softmax判断Anchor中是否包含文本，即选出Softmax score大的正Anchor
 
-2. Bounding box regression修正包含文本的Anchor的***\*中心y坐标\****与***\*高度\****。
+2. Bounding box regression修正包含文本的Anchor的**中心y坐标**与***高度***。
 
 注意，与Faster R-CNN不同的是，这里Bounding box regression不修正Anchor中心x坐标和宽度。具体回归方式如下：
 
@@ -182,7 +184,7 @@ Anchor经过上述Softmax和 ![[公式]](https://www.zhihu.com/equation?tex=y) �
 
 
 
-##  文本线构造算法
+##  3.文本线构造算法
 
 在一个步骤中，已经获得了图所示的一串或者多串text proposals，接下来就要采用文本线构造办法，把浙西诶text proposals链接成一个文本检测框。
 
@@ -202,7 +204,7 @@ Anchor经过上述Softmax和 ![[公式]](https://www.zhihu.com/equation?tex=y) �
 
    下面详细解释，假设每个Anchor index如绿色数字，同时每个Anchor softmax score如黑色数字。
 
-***\*文本线构造算法通过如下方式建立每个Anchor\**** ![[公式]](https://www.zhihu.com/equation?tex=%5Ctext%7Bbox%7D_i) ***\*的\**** ![[公式]](https://www.zhihu.com/equation?tex=%5Ctext%7Bpair%7D%28%5Ctext%7Bbox%7D_i%2C+%5Ctext%7Bbox%7D_j%29) ***\*：\****
+***文本线构造算法通过如下方式建立每个Anchor*** ![[公式]](https://www.zhihu.com/equation?tex=%5Ctext%7Bbox%7D_i) ***的*** ![[公式]](https://www.zhihu.com/equation?tex=%5Ctext%7Bpair%7D%28%5Ctext%7Bbox%7D_i%2C+%5Ctext%7Bbox%7D_j%29) ***：***
 
 正向寻找：
 
@@ -228,8 +230,7 @@ Anchor经过上述Softmax和 ![[公式]](https://www.zhihu.com/equation?tex=y) �
 
 
 
-\```python
-
+```
 lass TextProposalGraphBuilder:
 
 ​    .....
@@ -305,8 +306,9 @@ lass TextProposalGraphBuilder:
 ​                graph[index, succession_index]=True
 
 ​        return Graph(graph)
+```
 
-\```
+
 
 
 
@@ -318,9 +320,9 @@ lass TextProposalGraphBuilder:
 
 
 
-\1. 对 ![[公式]](https://www.zhihu.com/equation?tex=i%3D3) 的 ![[公式]](https://www.zhihu.com/equation?tex=%5Ctext%7Bbox%7D_3) ，向前寻找50像素，满足 ![[公式]](https://www.zhihu.com/equation?tex=%5Ctext%7Boverlap%7D_v%3E0.7) 且score最大的是 ![[公式]](https://www.zhihu.com/equation?tex=%5Ctext%7Bbox%7D_7) ，即 ![[公式]](https://www.zhihu.com/equation?tex=j%3D7) ； ![[公式]](https://www.zhihu.com/equation?tex=%5Ctext%7Bbox%7D_7) 反向寻找，满足 ![[公式]](https://www.zhihu.com/equation?tex=%5Ctext%7Boverlap%7D_v+%3E0.7) 且score最大的是 ![[公式]](https://www.zhihu.com/equation?tex=%5Ctext%7Bbox%7D_3) ，即 ![[公式]](https://www.zhihu.com/equation?tex=k%3D3) 。由于 ![[公式]](https://www.zhihu.com/equation?tex=%5Ctext%7Bscore%7D_3+%3E%3D+%5Ctext%7Bscore%7D_3) ， ![[公式]](https://www.zhihu.com/equation?tex=%5Ctext%7Bpair%7D%28%5Ctext%7Bbox%7D_3%2C+%5Ctext%7Bbox%7D_7%29) 是最长连接，那么设置 ![[公式]](https://www.zhihu.com/equation?tex=%5Ctext%7BGraph%7D%283%2C7%29+%3D+%5Ctext%7BTrue%7D)
+1. 对 ![[公式]](https://www.zhihu.com/equation?tex=i%3D3) 的 ![[公式]](https://www.zhihu.com/equation?tex=%5Ctext%7Bbox%7D_3) ，向前寻找50像素，满足 ![[公式]](https://www.zhihu.com/equation?tex=%5Ctext%7Boverlap%7D_v%3E0.7) 且score最大的是 ![[公式]](https://www.zhihu.com/equation?tex=%5Ctext%7Bbox%7D_7) ，即 ![[公式]](https://www.zhihu.com/equation?tex=j%3D7) ； ![[公式]](https://www.zhihu.com/equation?tex=%5Ctext%7Bbox%7D_7) 反向寻找，满足 ![[公式]](https://www.zhihu.com/equation?tex=%5Ctext%7Boverlap%7D_v+%3E0.7) 且score最大的是 ![[公式]](https://www.zhihu.com/equation?tex=%5Ctext%7Bbox%7D_3) ，即 ![[公式]](https://www.zhihu.com/equation?tex=k%3D3) 。由于 ![[公式]](https://www.zhihu.com/equation?tex=%5Ctext%7Bscore%7D_3+%3E%3D+%5Ctext%7Bscore%7D_3) ， ![[公式]](https://www.zhihu.com/equation?tex=%5Ctext%7Bpair%7D%28%5Ctext%7Bbox%7D_3%2C+%5Ctext%7Bbox%7D_7%29) 是最长连接，那么设置 ![[公式]](https://www.zhihu.com/equation?tex=%5Ctext%7BGraph%7D%283%2C7%29+%3D+%5Ctext%7BTrue%7D)
 
-\2. 对 ![[公式]](https://www.zhihu.com/equation?tex=%5Ctext%7Bbox%7D_4) 正向寻找得到 ![[公式]](https://www.zhihu.com/equation?tex=%5Ctext%7Bbox%7D_7) ； ![[公式]](https://www.zhihu.com/equation?tex=%5Ctext%7Bbox%7D_7) 反向寻找得到 ![[公式]](https://www.zhihu.com/equation?tex=%5Ctext%7Bbox%7D_3) ，但是 ![[公式]](https://www.zhihu.com/equation?tex=%5Ctext%7Bscore%7D_4+%3C+%5Ctext%7Bscore%7D_3)，即 ![[公式]](https://www.zhihu.com/equation?tex=%5Ctext%7Bpair%7D%28%5Ctext%7Bbox%7D_4%2C+%5Ctext%7Bbox%7D_7%29) 不是最长连接，包含在 ![[公式]](https://www.zhihu.com/equation?tex=%5Ctext%7Bpair%7D%28%5Ctext%7Bbox%7D_3%2C+%5Ctext%7Bbox%7D_7%29) 中。
+2. 对 ![[公式]](https://www.zhihu.com/equation?tex=%5Ctext%7Bbox%7D_4) 正向寻找得到 ![[公式]](https://www.zhihu.com/equation?tex=%5Ctext%7Bbox%7D_7) ； ![[公式]](https://www.zhihu.com/equation?tex=%5Ctext%7Bbox%7D_7) 反向寻找得到 ![[公式]](https://www.zhihu.com/equation?tex=%5Ctext%7Bbox%7D_3) ，但是 ![[公式]](https://www.zhihu.com/equation?tex=%5Ctext%7Bscore%7D_4+%3C+%5Ctext%7Bscore%7D_3)，即 ![[公式]](https://www.zhihu.com/equation?tex=%5Ctext%7Bpair%7D%28%5Ctext%7Bbox%7D_4%2C+%5Ctext%7Bbox%7D_7%29) 不是最长连接，包含在 ![[公式]](https://www.zhihu.com/equation?tex=%5Ctext%7Bpair%7D%28%5Ctext%7Bbox%7D_3%2C+%5Ctext%7Bbox%7D_7%29) 中。
 
 
 
@@ -328,9 +330,9 @@ lass TextProposalGraphBuilder:
 
 
 
-\1. ![[公式]](https://www.zhihu.com/equation?tex=%5Ctext%7BGraph%7D%280%2C3%29+%3D+%5Ctext%7BTrue%7D) 且 ![[公式]](https://www.zhihu.com/equation?tex=%5Ctext%7BGraph%7D%283%2C7%29+%3D+%5Ctext%7BTrue%7D) ，所以Anchor index 0->3->7组成一个文本，即蓝色文本区域。
+1. ![[公式]](https://www.zhihu.com/equation?tex=%5Ctext%7BGraph%7D%280%2C3%29+%3D+%5Ctext%7BTrue%7D) 且 ![[公式]](https://www.zhihu.com/equation?tex=%5Ctext%7BGraph%7D%283%2C7%29+%3D+%5Ctext%7BTrue%7D) ，所以Anchor index 0->3->7组成一个文本，即蓝色文本区域。
 
-\2. ![[公式]](https://www.zhihu.com/equation?tex=%5Ctext%7BGraph%7D%286%2C10%29+%3D+%5Ctext%7BTrue%7D) 且 ![[公式]](https://www.zhihu.com/equation?tex=%5Ctext%7BGraph%7D%2810%2C12%29+%3D+%5Ctext%7BTrue%7D) ，所以Anchor index 6->10->12组成另外一个文本，即红色文本区域。
+2. ![[公式]](https://www.zhihu.com/equation?tex=%5Ctext%7BGraph%7D%286%2C10%29+%3D+%5Ctext%7BTrue%7D) 且 ![[公式]](https://www.zhihu.com/equation?tex=%5Ctext%7BGraph%7D%2810%2C12%29+%3D+%5Ctext%7BTrue%7D) ，所以Anchor index 6->10->12组成另外一个文本，即红色文本区域。
 
 
 
@@ -350,11 +352,11 @@ lass TextProposalGraphBuilder:
 
 明显可以看出，该Loss分为3个部分：
 
-\1. Anchor Softmax loss：该Loss用于监督学习每个Anchor中是否包含文本。 ![[公式]](https://www.zhihu.com/equation?tex=s_i%5E%2A%3D%5C%7B0%2C1%5C%7D) 表示是否是Groud truth。
+1. Anchor Softmax loss：该Loss用于监督学习每个Anchor中是否包含文本。 ![[公式]](https://www.zhihu.com/equation?tex=s_i%5E%2A%3D%5C%7B0%2C1%5C%7D) 表示是否是Groud truth。
 
-\2. Anchor y coord regression loss：该Loss用于监督学习每个包含为本的Anchor的Bouding box regression y方向offset，类似于Smooth L1 loss。其中 ![[公式]](https://www.zhihu.com/equation?tex=v_j) 是 ![[公式]](https://www.zhihu.com/equation?tex=s_i) 中判定为有文本的Anchor，或者与Groud truth vertical IoU>0.5。
+2. Anchor y coord regression loss：该Loss用于监督学习每个包含为本的Anchor的Bouding box regression y方向offset，类似于Smooth L1 loss。其中 ![[公式]](https://www.zhihu.com/equation?tex=v_j) 是 ![[公式]](https://www.zhihu.com/equation?tex=s_i) 中判定为有文本的Anchor，或者与Groud truth vertical IoU>0.5。
 
-\3. Anchor x coord regression loss：该Loss用于监督学习每个包含文本的Anchor的Bouding box regression x方向offset，与y方向同理。前两个Loss存在的必要性很明确，但这个Loss有何作用作者没有解释（从训练和测试的实际效果看，作用不大）
+3. Anchor x coord regression loss：该Loss用于监督学习每个包含文本的Anchor的Bouding box regression x方向offset，与y方向同理。前两个Loss存在的必要性很明确，但这个Loss有何作用作者没有解释（从训练和测试的实际效果看，作用不大）
 
 说明一下，在Bounding box regression的训练过程中，其实只需要注意被判定成正的Anchor，不需要去关心杂乱的负Anchor。这与Faster R-CNN类似。
 
@@ -362,11 +364,11 @@ lass TextProposalGraphBuilder:
 
 ## 总结
 
-\1. 由于加入LSTM，所以CTPN对水平文字检测效果超级好。
+1. 由于加入LSTM，所以CTPN对水平文字检测效果超级好。
 
-\2. 因为Anchor设定的原因，CTPN只能检测横向分布的文字，小幅改进加入水平Anchor即可检测竖直文字。但是由于框架限定，对不规则倾斜文字检测效果非常一般。
+2. 因为Anchor设定的原因，CTPN只能检测横向分布的文字，小幅改进加入水平Anchor即可检测竖直文字。但是由于框架限定，对不规则倾斜文字检测效果非常一般。
 
-\3. CTPN加入了双向LSTM学习文字的序列特征，有利于文字检测。但是引入LSTM后，在训练时很容易梯度爆炸，需要小心处理。
+3. CTPN加入了双向LSTM学习文字的序列特征，有利于文字检测。但是引入LSTM后，在训练时很容易梯度爆炸，需要小心处理。
 
 
 
@@ -454,11 +456,11 @@ CTPN借助Faster RCNN中的anchor机制，使用RPN能有效的用单一尺寸�
 
 
 
-\# CTPN讲解3
+## CTPN讲解3
 
-\## 算法详解
+## 算法详解
 
-\## 1. 算法流程
+### 1.算法流程
 
 CTPN的流程和Faster R-CNN的RPN网络类似，首先使用VGG-16提取特征，在conv5进行 ![[公式]](https://www.zhihu.com/equation?tex=3%5Ctimes3) ，步长为1的滑窗。设conv5的尺寸是 ![[公式]](https://www.zhihu.com/equation?tex=W%5Ctimes+H) ，这样在conv5的同一行，我们可以得到W个256维的特征向量。将同一行的特征向量输入一个双向LSTM中，在双向LSTM后接一个512维的全连接后便是CTPN的3个任务的多任务损失，结构如图1。任务1的输出是 ![[公式]](https://www.zhihu.com/equation?tex=2%5Ctimes+k) ，用于预测候选区域的起始 ![[公式]](https://www.zhihu.com/equation?tex=y) 坐标和高度 ![[公式]](https://www.zhihu.com/equation?tex=h) ；任务2是用来对前景和背景两个任务的分类评分；任务3是 ![[公式]](https://www.zhihu.com/equation?tex=k)个输出的side-refinement的偏移（offset）预测。在CTPN中，任务1和任务2是完全并行的任务，而任务3要用到任务1，2的结果，所以理论上任务3和其他两个是串行的任务关系，但三者放在同一个损失和函数中共同训练，也就是我们在Faster R-CNN中介绍的近似联合训练。
 
@@ -472,7 +474,7 @@ CTPN的流程和Faster R-CNN的RPN网络类似，首先使用VGG-16提取特征�
 
 
 
-\## 2. 数据准备
+### 2.数据准备
 
 
 
@@ -496,11 +498,7 @@ def resize_im(im, scale, max_scale=None):
 
 
 
-\------
-
-
-
-## CTPN的锚点机制
+## 3.CTPN的锚点机制
 
 
 
@@ -526,7 +524,7 @@ def resize_im(im, scale, max_scale=None):
 
 
 
-\## 4. CTPN中的RNN
+### 4.CTPN中的RNN
 
 
 
@@ -638,7 +636,7 @@ layer {
 
 
 
-\## 5. side-refinement
+### 5. side-refinement
 
 
 
@@ -646,7 +644,7 @@ layer {
 
 
 
-\## 5.1 文本行的构造
+####  5.1 文本行的构造
 
 
 
@@ -694,7 +692,7 @@ def get_successions(self, index):
 
 
 
-\## 5.2 side-refinement的损失函数
+#### 5.2 side-refinement的损失函数
 
 
 
@@ -718,7 +716,7 @@ def get_successions(self, index):
 
 
 
-\## 6. CTPN的损失函数
+### 6. CTPN的损失函数
 
 
 
@@ -726,7 +724,7 @@ CTPN使用的是Faster R-CNN的近似联合训练，即将分类，预测，side
 
 
 
-\## 6.1 文本区域得分损失 ![[公式]](https://www.zhihu.com/equation?tex=L_s%5E%7Bcl%7D)
+####  6.1 文本区域得分损失 ![[公式]](https://www.zhihu.com/equation?tex=L_s%5E%7Bcl%7D)
 
 
 
@@ -748,7 +746,7 @@ CTPN使用的是Faster R-CNN的近似联合训练，即将分类，预测，side
 
 
 
-\## 6.2 纵坐标损失 ![[公式]](https://www.zhihu.com/equation?tex=L_v%5E%7Bre%7D)
+#### 6.2 纵坐标损失 ![[公式]](https://www.zhihu.com/equation?tex=L_v%5E%7Bre%7D)
 
 
 
@@ -795,3 +793,12 @@ CTPN使用的是Faster R-CNN的近似联合训练，即将分类，预测，side
 
 
 每个minibatch同样采用“Image-centric”的采样方法，每次随机取一张图片，然后在这张图片中采样128个样本，并尽量保证正负样本数量的均衡。卷积层使用的是Image-Net上无监督训练得到的结果，权值初始化使用的是均值为0，标准差为0.01的高斯分布。SGD的参数中，遗忘因子是0.9，权值衰减系数是0.0006。前16k次迭代的学习率是0.001，后4k次迭代的学习率是0.0001。
+
+
+
+
+
+## 参考文章
+
+* https://zhuanlan.zhihu.com/p/34757009
+* https://blog.csdn.net/bestrivern/article/details/100889632
