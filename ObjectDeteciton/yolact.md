@@ -148,7 +148,7 @@ python3 detect.py --trained_model=latest_res101_custom_601.pth --image /home/jia
 
 * https://blog.csdn.net/weixin_44878465/article/details/108149285
 * https://github.com/dbolya/yolact
-
+* https://blog.csdn.net/weixin_40802676/article/details/115413362
 * https://github.com/x0rzkov/yolact-mini-docker
 * https://github.com/feiyuhuahuo/Yolact_minimal
 
