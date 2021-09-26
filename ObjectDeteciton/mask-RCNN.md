@@ -2,6 +2,8 @@
 
 * [【从零开始学Mask RCNN】一，原理回顾&&项目文档翻译](https://zhuanlan.zhihu.com/p/150104383)
 * [Mask RCNN原理讲解](https://blog.csdn.net/qq_37392244/article/details/88844681)
+* [令人拍案称奇的Mask RCNN](https://zhuanlan.zhihu.com/p/37998710)
+
 ### 原理回顾
 
 ### 1.前言
