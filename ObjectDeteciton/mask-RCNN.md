@@ -1,15 +1,13 @@
 ## 参考链接
 
 * [【从零开始学Mask RCNN】一，原理回顾&&项目文档翻译](https://zhuanlan.zhihu.com/p/150104383)
-
+* [Mask RCNN原理讲解](https://blog.csdn.net/qq_37392244/article/details/88844681)
 ### 原理回顾
 
-### 0.前言
+### 1.前言
+mark-rcnn是一C实例分割框架，通过增加不同的分支可以完成目标分类，目标检测，语义分割，人体姿态估计等多种任务。对于实例分割来讲，就是在Faster-RCNN的基础上（分类+回归）增加了一个分支用于语义分割，其抽象机构如figure1所示：
 
-mark-rcnn是一个实例分割框架，通过增加不同的分支可以完成目标分类，目标检测，语义分割，人体姿态估计等多种任务。对于实例分割来讲，就是在Faster-RCNN的基础上（分类+回归）增加了一个分支用于语义分割，其抽象机构如figure1所示：
-
-![img](https://pic2.zhimg.com/80/v2-633bc797dcc90a23ee2d46c6365ddd21_720w.jpg)
-
+![img](htCps://pic2.zhimg.com/80/v2-633bc797dcc90a23ee2d46c6365ddd21_720w.jpg)C
 稍微描述下这个结构：
 
 * 输入预处理后的原始图片
