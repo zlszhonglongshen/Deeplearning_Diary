@@ -1,0 +1,20 @@
+BACKBONE = “resnet50” ；这个是迁移学习调用的模型，分为resnet101和resnet50，电脑性能不是特别好的话，建议选择resnet50，这样网络更小，训练的更快。
+
+model.train(…, layers=‘heads’, …) # Train heads branches (least memory)
+model.train(…, layers=‘3+’, …) # Train resnet stage 3 and up
+model.train(…, layers=‘4+’, …) # Train resnet stage 4 and up
+model.train(…, layers=‘all’, …) # Train all layers (most memory)#这里是选择训练的层数，根据自己的要求选择
+
+IMAGE_MIN_DIM = 800
+IMAGE_MAX_DIM = 1024#设置训练时的图像大小，最终以IMAGE_MAX_DIM为准，如果电脑性能不是太好，建议调小
+
+GPU_COUNT = 1
+IMAGES_PER_GPU = 2#这个是对GPU的设置，如果显存不够，建议把2调成1（虽然batch_size为1并不利于收敛)
+
+TRAIN_ROIS_PER_IMAGE = 200;可根据自己数据集的真实情况来设定
+
+MAX_GT_INSTANCES = 100；设置图像中最多可检测出来的物体数量
+
+数据集按照上述格式建立，然后配置好路径即可训练，在windows训练的时候有个问题，就是会出现训练时一直卡在epoch1，这个问题是因为keras在低版本中不支持多线程（在windows上），推荐keras2.1.6，这个亲测可以~
+
+训练的模型会保存在logs文件夹下，.h5格式，训练好后直接调用即可

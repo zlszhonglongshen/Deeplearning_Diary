@@ -1,0 +1,12 @@
+此部分代码参考的博客地址为：https://blog.csdn.net/u013597931/article/details/89412272
+此部分代码参数中 85 的修改需要注意，便于后期根据自己模型而做调整：
+
+tx = feat[cx][cy][0 + 85 * i] # 85的意思（classes + 4 + 1）
+ty = feat[cx][cy][1 + 85 * i] # 85的意思（classes + 4 + 1）
+tw = feat[cx][cy][2 + 85 * i] # 85的意思（classes + 4 + 1）
+th = feat[cx][cy][3 + 85 * i] # 85的意思（classes + 4 + 1）
+cf = feat[cx][cy][4 + 85 * i] # 85的意思（classes + 4 + 1）
+cp = feat[cx][cy][5 + 85 * i:85 + 85 * i] # 85的意思（classes + 4 + 1）
+————————————————
+版权声明：本文为CSDN博主「沙皮狗de忧伤」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
+原文链接：https://blog.csdn.net/weixin_38106878/article/details/103714551
