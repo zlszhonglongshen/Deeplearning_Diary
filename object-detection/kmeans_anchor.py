@@ -5,7 +5,6 @@
 @Author  : Johnson
 @Email   : 593956670@qq.com
 """
-# coding=utf-8
 import xml.etree.ElementTree as ET
 import numpy as np
 
