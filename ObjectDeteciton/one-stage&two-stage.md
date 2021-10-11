@@ -4,9 +4,9 @@ one-stage网络以yolo系列网络为代表的，two-stage网络以faster-rcnn�
 
 #### 主要区别
 
-\* one-stage网络速度要快很多
+* one-stage网络速度要快很多
 
-\* one-stage网络的准确性要比two-stage网络要低
+* one-stage网络的准确性要比two-stage网络要低
 
 #### 为什么one网络速度要快很多？
 
@@ -28,12 +28,12 @@ one-stage网络以yolo系列网络为代表的，two-stage网络以faster-rcnn�
 
 #### 解决one-stage网络背景anchor过多导致的不均衡问题方案
 
-\* 采用focal-loss，将目标置信度这部分的损失换成focal-loss，具体如下：
+* 采用focal-loss，将目标置信度这部分的损失换成focal-loss，具体如下：
 
-\* 增大非背景anchor的数量
+* 增大非背景anchor的数量
 
 某个像素点生成的三个ancor，与真实grundtruth重合最大那个负责预测，它负责计算位置损失、目标置信度损失、类别损失，这些不管，它还有另外两个ancor，虽然另外两个ancor不是与真实grundtruth重合最大，但是只要重合大于某个阀值比如大于0.7，我就认为它是非背景ancor，但注意它只计算目标置信度损失，位置和类别损失不参与计算，而小于0.3的我直接不让它参与目标置信度损失的计算，实现也就是将它的权重置0，这个思想就类似two-stage网络那个筛选机制，从2000多个ancor中筛选300个参与训练或者计算目标置信度损失，相当于我把小于0.3的ancor我都筛选掉了，让它不参与损失计算
 
-\* 设置权重
+* 设置权重
 
 在目标置信度损失计算时，将背景ancor的权重设置得很小，非背景ancor的权重设置得很大
