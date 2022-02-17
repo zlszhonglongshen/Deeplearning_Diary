@@ -28,3 +28,8 @@
 * [Jetson nano上部署自己的Yolov5模型（TensorRT加速）](https://blog.csdn.net/ailaier/article/details/116270962?utm_medium=distribute.pc_aggpage_search_result.none-task-blog-2~aggregatepage~first_rank_v2~rank_aggregation-11-116270962.pc_agg_rank_aggregation&utm_term=jetsonnano%E9%83%A8%E7%BD%B2yolov5&spm=1000.2123.3001.4430)
 * [Jetson Nano 2GB编译Yolov5，并用TensorRT加速教程](https://zhuanlan.zhihu.com/p/296314513)
 * [目标检测算法实现（六）——Yolov5实战-Jetson Nano部署](https://blog.csdn.net/qq_40305597/article/details/117320573?utm_medium=distribute.pc_aggpage_search_result.none-task-blog-2~aggregatepage~first_rank_v2~rank_aggregation-13-117320573.pc_agg_rank_aggregation&utm_term=jetsonnano%E9%83%A8%E7%BD%B2yolov5&spm=1000.2123.3001.4430)
+
+
+
+
+
