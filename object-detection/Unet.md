@@ -28,7 +28,39 @@
 
 
 
+## 参数量计算
 
+参数量就是指，模型所有带参数的层的权重参数总量。视觉类网络组件中带参数的层，主要有：卷积层、BN层、全连接层等。注意，激活函数层和maxpooling层，upsample层是没有参数的，不需要学习，他们只是提供了一种非线性的变换。
+
+**https://mp.weixin.qq.com/s/TdacJ-Jp4BTM3HCG-Fw61A**
+
+### 理论公式部分
+
+#### 卷积层
+
+![image-20220220161151357](/Users/zhongls/Library/Application Support/typora-user-images/image-20220220161151357.png)
+
+**BN层**
+
+2xC，其中C为输入的channel
+
+BN层有两个需要学习的参数，平移因子和缩放因子。
+
+**全连接层**
+
+TixTo+To,Ti为输入变量的长度，To为输出向量的长度，其中第二项为偏置项参数量。
+
+不过目前全连接层已经逐步被Gloabal Average Pooling层取代了。
+
+### 实践部分
+
+首先摆出经典的unet结构图
+
+![图片](https://mmbiz.qpic.cn/sz_mmbiz_jpg/gYUsOT36vfojxicnYaiacAeQKcWM1Mm6LH8V4fJb7bPs97OOrWyBkJfYDSGibObxC2ScH8PNn5ibebY0KS41bTkoWA/640?wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+
+我们把UNet共分为5个Stage，分别计算每个stage的参数量。每个stage的filter数量为
+
+[32,64,128,256,512]，相比于UNet原文，我们把UNet的channel数缩小了两倍，大多数论文也的确是这么做的。同时，我们设置UNet上采样方式为TransposeConv（转置卷积），并在每个 Conv后加入BN层。最后假定，原始输入channel为1，输出分割图为两类(含背景)，这样最终得到我们要计算参数量的UNet。
 
 
 
