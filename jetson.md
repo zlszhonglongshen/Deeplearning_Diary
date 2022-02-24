@@ -1,6 +1,6 @@
 # 环境安装
 * [Jetson nano配置pytorch环境（tensorflow也可）部署yolov5](https://blog.csdn.net/qq_43263543/article/details/115128258?utm_medium=distribute.pc_aggpage_search_result.none-task-blog-2~aggregatepage~first_rank_v2~rank_aggregation-14-115128258.pc_agg_rank_aggregation&utm_term=jetsonnano%E9%83%A8%E7%BD%B2yolov5&spm=1000.2123.3001.4430)
-
+* [Jetson Nano使用TensorRT加速yolov3-tiny目标识别](https://zhuanlan.zhihu.com/p/344028017)
 * [jetson专栏](https://blog.csdn.net/beckhans/category_8839715.html)
 * [jetson nano专栏](https://blog.csdn.net/walletiger/category_10584720.html)
 * [nano上部署自己训练的yolov5模型（cuda配置,pytorch,tensorrt加速一站式解决）](https://blog.csdn.net/weixin_45454706/article/details/110346822?utm_term=jetsonnano%E9%83%A8%E7%BD%B2yolov5&utm_medium=distribute.pc_aggpage_search_result.none-task-blog-2~all~sobaiduweb~default-3-110346822&spm=3001.4430)
@@ -24,7 +24,7 @@
 * [在jetson nano上配置ncnn](https://zhuanlan.zhihu.com/p/285594861)
 
 
-
+## 
 
 # torch=1.6
 git clone --branch v0.7.0 https://github.com/pytorch/vision torchvision
