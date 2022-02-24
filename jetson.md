@@ -10,6 +10,12 @@
 * [Jetson Nano（ 五） TensorRT yolov4 yolov4-tiny yolov5 实测](https://blog.csdn.net/djj199301111/article/details/110173275)
 * [目标检测算法实现（六）——Yolov5实战-Jetson Nano部署](https://blog.csdn.net/qq_40305597/article/details/117320573?utm_medium=distribute.pc_aggpage_search_result.none-task-blog-2~aggregatepage~first_rank_v2~rank_aggregation-13-117320573.pc_agg_rank_aggregation&utm_term=jetsonnano%E9%83%A8%E7%BD%B2yolov5&spm=1000.2123.3001.4430)
 * [Jetson Nano （八） PaddlePaddle 环境配置 PaddleHub—OCR测试](https://blog.csdn.net/djj199301111/article/details/114487656)
+* 
+
+
+
+## 软件配置
+* [Jetson Nano 入门教程4 - 必备软件 Jupyterlab 3.0](https://zhuanlan.zhihu.com/p/342803670)
 * [opencv源码安装&卸载](https://blog.csdn.net/alphonse2017/article/details/94624181)
 
 ## 人脸
@@ -71,3 +77,16 @@ JP4.4.1	yolov5n v6.0	Tensorrt 7.1.3.0	608*608	FP16	35-47
 JP4.4.1	yolov5s v3.1	PyTorch 1.6	608*608	—	170~210
 JP4.4.1	yolov5s v6.0	PyTorch 1.8	608*608	—	140~175
 JP4.4.1	yolov5s v3.1	PyTorch 1.6	416*416	—	120~140
+
+
+
+### jetson使用教程
+```python
+sudo pip3 install -U jetson-stats
+
+sudo jtop
+```
+
+
+
+
