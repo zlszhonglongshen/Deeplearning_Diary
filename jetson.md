@@ -33,18 +33,22 @@
 ## 
 
 # torch=1.6
+```
 git clone --branch v0.7.0 https://github.com/pytorch/vision torchvision
 cd torchvision
 export BUILD_VERSION=0.7.0
 sudo python3 setup.py install 
 cd ../
+```
 
 # torch=1.7
+```
 git clone --branch v0.8.0 https://github.com/pytorch/vision torchvision
 cd torchvision
 export BUILD_VERSION=0.8.0
 sudo python3 setup.py install 
 cd ../
+```
 
 ```
 import torch
