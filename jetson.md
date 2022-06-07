@@ -65,6 +65,7 @@ print('Tensor c = ' + str(c))
 
 原文链接：https://blog.csdn.net/djj199301111/article/details/110173275
 
+```
 系统	模型	框架	输入	精度	时间(ms)
 JP4.3	yolov5s v1.0	PyTorch 1.4	416*416	—	60~80
 JP4.4.1	yolov4	Tensorrt 7.1.3.0	416*416	FP16	280
@@ -77,7 +78,7 @@ JP4.4.1	yolov5n v6.0	Tensorrt 7.1.3.0	608*608	FP16	35-47
 JP4.4.1	yolov5s v3.1	PyTorch 1.6	608*608	—	170~210
 JP4.4.1	yolov5s v6.0	PyTorch 1.8	608*608	—	140~175
 JP4.4.1	yolov5s v3.1	PyTorch 1.6	416*416	—	120~140
-
+```
 
 
 ### jetson使用教程
